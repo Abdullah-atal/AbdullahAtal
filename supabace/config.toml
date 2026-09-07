@@ -1,0 +1,1 @@
+[functions.create-payment-session]\nverify_jwt = true\n\n[functions.stripe-webhook]\nverify_jwt = false\n
