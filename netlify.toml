@@ -1,0 +1,1 @@
+[build]\npublish = "."\n[[redirects]]\nfrom = "/*"\nto = "/index.html"\nstatus = 200\n
