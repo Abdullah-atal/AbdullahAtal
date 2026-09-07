@@ -4,8 +4,34 @@ import {supabase,supabaseConfigured} from "./lib/supabaseClient";
 const demo=[{id:"d1",name:"Studio Wireless Headphones",category:"Electronics",price:79,stock:18,emoji:"🎧",seller:"NovaSound Store"},{id:"d2",name:"Smart Watch Pro",category:"Electronics",price:59,stock:24,emoji:"⌚",seller:"Orbit Tech"},{id:"d3",name:"Everyday Runner Sneakers",category:"Fashion",price:64,stock:9,emoji:"👟",seller:"StepUp"},{id:"d4",name:"Urban Travel Backpack",category:"Fashion",price:42,stock:31,emoji:"🎒",seller:"Nomad Goods"}];
 
 export default function App(){
- const[session,setSession]=useState(null),[tab,setTab]=useState("shop"),[products,setProducts]=useState([]),[cart,setCart]=useState([]),[email,setEmail]=useState(""),[password,setPassword]=useState(""),[fullName,setFullName]=useState(""),[mode,setMode]=useState("signin"),[message,setMessage]=useState(""),[adminProducts,setAdminProducts]=useState([]),[adminStores,setAdminStores]=useState([]),[isAdmin,setIsAdmin]=useState(false),[loading,setLoading]=useState(false),[store,setStore]=useState(null),[orders,setOrders]=useState([]),[checkout,setCheckout]=useState({name:"",phone:"",address:""}),[newProduct,setNewProduct]=useState({name:"",price:"",stock:"",description:""}),[image,setImage]=useState(null);
-
+  const[session,setSession]=useState(null),
+ [tab,setTab]=useState("shop"),
+ [products,setProducts]=useState([]),
+ [cart,setCart]=useState([]),
+ [email,setEmail]=useState(""),
+ [password,setPassword]=useState(""),
+ [fullName,setFullName]=useState(""),
+ [mode,setMode]=useState("signin"),
+ [message,setMessage]=useState(""),
+ [adminProducts,setAdminProducts]=useState([]),
+ [adminStores,setAdminStores]=useState([]),
+ [isAdmin,setIsAdmin]=useState(false),
+ [loading,setLoading]=useState(false),
+ [store,setStore]=useState(null),
+ [orders,setOrders]=useState([]),
+ [checkout,setCheckout]=useState({name:"",phone:"",address:""}),
+ [newProduct,setNewProduct]=useState({name:"",price:"",stock:"",description:""}),
+ [image,setImage]=useState(null),
+ [query,setQuery]=useState(""),
+ [category,setCategory]=useState(""),
+ [favorites,setFavorites]=useState([]),
+ [tickets,setTickets]=useState([]),
+ [delivery,setDelivery]=useState([]),
+ [shipping,setShipping]=useState([]),
+ [selectedShipping,setSelectedShipping]=useState(""),
+ [returns,setReturns]=useState([]),
+ [notifications,setNotifications]=useState([]),
+ [analytics,setAnalytics]=useState(null);
  useEffect(()=>{if(!supabaseConfigured){setProducts(demo);return}supabase.auth.getSession().then(({data})=>setSession(data.session));const{data:l}=supabase.auth.onAuthStateChange((_e,s)=>setSession(s));loadProducts();return()=>l.subscription.unsubscribe()},[]);
  useEffect(()=>{if(session&&supabaseConfigured){loadStore();loadCart();loadOrders();loadAdmin();loadNotifications();loadShipping();loadReturns();loadDelivery();loadFavorites();loadTickets();loadDelivery()}},[session]);
  async function loadFavorites(){const{data}=await supabase.from("favorites").select("product_id");setFavorites((data||[]).map(x=>x.product_id))}
