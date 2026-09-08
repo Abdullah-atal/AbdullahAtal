@@ -1,4 +1,4 @@
-import {useEffect,useState} from "react";
+import React,{useEffect,useState} from "react";
 import {supabase,supabaseConfigured} from "./lib/supabaseClient";
 
 const demo=[{id:"d1",name:"Studio Wireless Headphones",category:"Electronics",price:79,stock:18,emoji:"🎧",seller:"NovaSound Store"},{id:"d2",name:"Smart Watch Pro",category:"Electronics",price:59,stock:24,emoji:"⌚",seller:"Orbit Tech"},{id:"d3",name:"Everyday Runner Sneakers",category:"Fashion",price:64,stock:9,emoji:"👟",seller:"StepUp"},{id:"d4",name:"Urban Travel Backpack",category:"Fashion",price:42,stock:31,emoji:"🎒",seller:"Nomad Goods"}];
