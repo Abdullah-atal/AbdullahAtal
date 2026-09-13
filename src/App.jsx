@@ -52,8 +52,34 @@ export default function App(){
  async function adminReturn(id,status){const{error}=await supabase.rpc("admin_update_return",{p_return:id,p_status:status});setMessage(error?.message||"Return updated.");loadReturns()}
  async function adminProduct(id,value){const{error}=await supabase.rpc("admin_set_product_active",{p_product:id,p_value:value});setMessage(error?.message||"Product updated.");loadAdmin();loadProducts()}
  async function payOrder(id){const{data,error}=await supabase.functions.invoke("create-payment-session",{body:{order_id:id}});if(error){setMessage(error.message);return}if(data?.url)window.location.href=data.url}
- async function loadOrders(){const{data,error}=await supabase.from("orders").select("id,status,total,shipping_name,shipping_address,created_at,order_items(product_name,unit_price,quantity,store_id)").order("created_at",{ascending:false});if(!error)setOrders(data||[])}
+ async function loadOrders(){
+  const{data,error}=await supabase
+    .from("orders")
+    .select(`
+      id,
+      status,
+      total,
+      payment_status,
+      shipping_name,
+      shipping_address,
+      created_at,
+      order_items(
+        product_name,
+        unit_price,
+        quantity,
+        store_id
+      )
+    `)
+    .order("created_at",{ascending:false});
 
+  if(error){
+    setMessage("Orders error: "+error.message);
+    console.error(error);
+    return;
+  }
+
+  setOrders(data||[]);
+}
  async function loadProducts(){const{data,error}=await supabase.from("products").select("id,name,description,price,stock,image_url,stores(name),categories(name)").eq("is_active",true).order("created_at",{ascending:false});if(error){setMessage(error.message);return}setProducts((data||[]).map(p=>({...p,category:p.categories?.name||"Marketplace",seller:p.stores?.name||"Seller",emoji:"🛍️"})))}
  async function loadStore(){const{data}=await supabase.from("stores").select("*").eq("owner_id",session.user.id).limit(1).maybeSingle();setStore(data)}
  async function loadCart(){const{data}=await supabase.from("carts").select("id,cart_items(id,quantity,product_id,products(name,price,image_url))").eq("user_id",session.user.id).maybeSingle();setCart(data?.cart_items||[])}
